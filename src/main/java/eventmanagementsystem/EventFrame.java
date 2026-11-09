@@ -296,7 +296,20 @@ public class EventFrame extends javax.swing.JFrame
         String location = jComboBox1.getSelectedItem().toString();
         String duration = jTextField5.getText();
         
-        eventList.add(new EventBooking(id, catagory, eventName, eventDate, location, duration));
+        for (EventBooking e : eventList)
+{
+    if (e.id.equals(id))
+    {
+        JOptionPane.showMessageDialog(this, "This Event ID already exists.");
+        return;
+    }
+    if (e.eventDate.equals(eventDate) && e.location.equals(location))
+    {
+        JOptionPane.showMessageDialog(this, "This location is already booked on this date.");
+        return;
+    }
+}
+        eventList.add(new EventBooking(id, catagory, eventName, eventDate, duration, location));
         dtm=(DefaultTableModel)jTable1.getModel();
         dtm.setRowCount(0);
         Object a[]=new Object[6];
@@ -330,6 +343,26 @@ public class EventFrame extends javax.swing.JFrame
         
         eventDate = ((JTextField)jDateChooser1.getDateEditor().getUiComponent()).getText();
         int i = jTable1.getSelectedRow();
+        if (i == -1)
+{
+    JOptionPane.showMessageDialog(this, "Select a row first.");
+    return;
+}
+for (int k = 0; k < eventList.size(); k++)
+{
+    if (k == i) continue;
+    EventBooking e = eventList.get(k);
+    if (e.id.equals(id))
+    {
+        JOptionPane.showMessageDialog(this, "This Event ID already exists.");
+        return;
+    }
+    if (e.eventDate.equals(eventDate) && e.location.equals(location))
+    {
+        JOptionPane.showMessageDialog(this, "This location is already booked on this date.");
+        return;
+    }
+}
         eventList.get(i).id = id;
         eventList.get(i).catagory = catagory;
         eventList.get(i).eventName = eventName;
@@ -341,7 +374,7 @@ public class EventFrame extends javax.swing.JFrame
         dtm.setValueAt(eventName, i, 2);
         dtm.setValueAt(eventDate, i, 3);
         dtm.setValueAt(location, i, 4);
-        dtm.setValueAt(duration, i, 4); 
+        dtm.setValueAt(duration, i, 5); 
         
         jTextField1.setText("");
         jTextField4.setText("");
